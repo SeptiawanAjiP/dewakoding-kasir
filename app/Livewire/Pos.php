@@ -12,6 +12,7 @@ class Pos extends Component
     public $search = '';
     public $product;
     public $order;
+    public $total_price;
 
     public function render()
     {
@@ -19,6 +20,7 @@ class Pos extends Component
                 ->with('orderProducts')
                 ->latest()
                 ->first();
+        $this->total_price = $this->order->total_price ?? 0;
         return view('livewire.pos', [
             'products' => Product::search($this->search)->paginate(12),
             'order' => $this->order
@@ -36,7 +38,7 @@ class Pos extends Component
                 'invoice_number' => $this->generateUniqueCode()
             ]);
         }
-        session()->flash('message', 'Buka kasir');
+        session()->flash('message', 'Sukses mulai transaksi, silakan pilih produk.');
     }
 
     public function addToCart($productId)
@@ -59,10 +61,11 @@ class Pos extends Component
                         'quantity' => 1
                     ]);
                 }
+                $this->total_price = $this->order->total_price ?? 0;
     
                 session()->flash('message', 'Produk berhasil ditambahkan');
             } else {
-                session()->flash('message', 'Buka Kasir dulu');
+                session()->flash('message', 'Klik Mulai Transaksi Dahulu');
             }
             
         } catch (ValidationException $e) {

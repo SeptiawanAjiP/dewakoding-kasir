@@ -22,6 +22,18 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
+    public function getTotalPriceAttribute()
+    {
+        $orderProducts = $this->orderProducts;
+        $totalPrice = 0;
+
+        foreach ($orderProducts as $orderProduct) {
+            $totalPrice += $orderProduct->unit_price * $orderProduct->quantity;
+        }
+
+        return $totalPrice;
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -29,7 +41,5 @@ class Order extends Model
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = (string) Str::uuid()->toString();
         });
-
-        
     }
 }

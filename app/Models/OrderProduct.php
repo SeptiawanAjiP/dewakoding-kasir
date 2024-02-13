@@ -37,4 +37,5 @@ class OrderProduct extends Model
             $model->{$model->getKeyName()} = Str::uuid()->toString();
         });
     }
+
 }

@@ -46,7 +46,7 @@
                
                 <div class="card-body">
                     @if (session()->has('message'))
-                        <div class="alert alert-success">
+                        <div class="alert alert-success text-center">
                             {{ session('message') }}
                         </div>
                     @endif
@@ -73,8 +73,12 @@
                     @else
                         <div class="text-center">
                             <p>Keranjang masih kosong</p>
-                            <button wire:click="createOrder()" class="btn btn-primary btn-block">Buka Kasir</button>
+                            <button wire:click="createOrder()" class="btn btn-primary btn-block">Mulai Transaksi</button>
                         </div>
+                    @endif
+
+                    @if($total_price != 0)
+                        <h4 class="text-center mt-3">Total : Rp. {{$total_price}}</h4>
                     @endif
                     
                 </div>

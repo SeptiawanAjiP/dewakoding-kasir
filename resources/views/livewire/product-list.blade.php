@@ -54,7 +54,7 @@
                                     <td>{{$item->cost_price}}</td>
                                     <td>{{$item->selling_price}}</td>
                                     <td class="px-4 py-3 flex items-center justify-end">
-                                        <a href="{{url('product/edit', ['id' => $item->id])}}" class="btn btn-warning">Edit</a>
+                                        <a href="{{url('product/edit', ['id' => $item->id])}} " class="btn btn-warning" wire:navigate>Edit</a>
                                         <button wire:click="destroy('{{ $item->id }}')" class="btn btn-danger" onclick="return confirm('Yakin menghapus produk ini ?')">Delete</button>
                                     </td>
                                 </tr>
