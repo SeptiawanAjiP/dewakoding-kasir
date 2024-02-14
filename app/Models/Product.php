@@ -36,6 +36,12 @@ class Product extends Model
         });
     }
 
+    public function getSellingPriceFormattedAttribute()
+    {
+        return 'Rp ' . number_format($this->selling_price, 0, ',', '.');
+    }
+
+
     public function getImageUrlAttribute()
     {
         if (Str::startsWith($this->image, ['http://', 'https://'])) {

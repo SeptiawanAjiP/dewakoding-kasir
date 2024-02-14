@@ -13,18 +13,26 @@
         </div>
 
         <div class="row">
-            @foreach ($products as $item)
-                <div wire:click="updateCart('{{ $item->id }}')" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mt-3">
-                    <div class="card h-100">
-                        <img src="{{ Str::startsWith($item->image, ['http://', 'https://']) ? $item->image : asset('/storage/product/' . $item->image) }}"
-                            class="card-img-top" alt="..." style="height: 120px;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $item->name }}</h5>
-                            <p class="card-text">Rp. {{ $item->selling_price }}</p>
+            @if(count($products) > 0)
+                @foreach ($products as $item)
+                    <div wire:click="updateCart('{{ $item->id }}')" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mt-3">
+                        <div class="card h-100">
+                            <img src="{{ Str::startsWith($item->image, ['http://', 'https://']) ? $item->image : asset('/storage/product/' . $item->image) }}"
+                                class="card-img-top" alt="..." style="height: 120px;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $item->name }}</h5>
+                                <p class="card-text">{{ $item->selling_price_formatted }}</p>
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            @else
+                <div class="col-12 mt-4">
+                    <div class="alert alert-danger" role="alert">
+                        Produk masih kosong, input produk terlebih dahulu.
+                    </div>
                 </div>
-            @endforeach
+            @endif
 
         </div>
         <div class="row mt-4">
@@ -61,7 +69,7 @@
 
                                 <div>
                                     <span>{{ $item->product->name }}</span><br>
-                                    <span class="text-muted">Rp. {{ $item->product->selling_price }}</span>
+                                    <span class="text-muted">{{ $item->product->selling_price_formatted }}</span>
                                 </div>
                                 <div class="d-flex align-items-center me-2">
                                     <button class="btn btn-sm btn-warning me-2"
@@ -74,22 +82,24 @@
                         </div>
                     @endforeach
                 @else
-                    <div class="text-center">
-                        <p>Keranjang masih kosong</p>
-                        <button wire:click="createOrder()" class="btn btn-primary btn-block">Mulai Transaksi</button>
-                    </div>
+                    @if(count($products) > 0)
+                        <div class="text-center">
+                            <p>Keranjang masih kosong</p>
+                            <button wire:click="createOrder()" class="btn btn-primary btn-block">Mulai Transaksi</button>
+                        </div>
+                    @endif
                 @endif
 
                 @if ($total_price != 0)
-                    <h4 class="text-center mt-3">Total : Rp. {{ $total_price }}</h4>
+                    <h4 class="text-center mt-3">Total : Rp {{  number_format($total_price, 0, ',', '.') }}</h4>
                 @endif
             </div>
             @if($order)
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Pembayaran
-                </button>
-            </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Pembayaran
+                    </button>
+                </div>
             @endif
         </div>
     </div>

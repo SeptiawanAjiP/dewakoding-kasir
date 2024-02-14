@@ -99,7 +99,7 @@ class Pos extends Component
         ]);
 
         session()->flash('message', 'Order/Transaksi selesai');
-        return redirect()->route('pos');
+        return redirect()->route('order');
     }
 
     function generateUniqueCode($length = 6) {

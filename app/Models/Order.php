@@ -17,7 +17,8 @@ class Order extends Model
 
     protected $fillable = [
         'invoice_number',
-        'done_at'
+        'done_at',
+        'paid_amount'
     ];
 
     public function orderProducts()
@@ -46,6 +47,17 @@ class Order extends Model
     {
         return $this->done_at ? Carbon::parse($this->done_at)->diffForHumans() : null;
     }
+
+    public function getPaidAmountFormattedAttribute()
+    {
+        return number_format($this->paid_amount, 0, ',', '.');
+    }
+
+    public function getTotalPriceFormattedAttribute()
+    {
+        return 'Rp ' . number_format($this->totalPrice, 0, ',', '.');
+    }
+
 
     protected static function boot()
     {

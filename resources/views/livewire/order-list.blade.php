@@ -33,7 +33,8 @@
                                 <tr>
                                     <th scope="col">Order Code</th>
                                     <th scope="col">Waktu Selesai</th>
-                                    <th scope="col">Total</th>
+                                    <th scope="col">Penjualan</th>
+                                    <th scope="col">Uang dibayarkan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,7 +43,8 @@
                                   
                                     <td>{{$item->invoice_number}}</td>
                                     <td>{{$item->done_at_for_human}}</td>
-                                    <td>Rp. {{$item->total_price}}</td>
+                                    <td>Rp. {{$item->total_price_formatted}}</td>
+                                    <td>Rp. {{$item->paid_amount_formatted}}</td>
                                    
                                 </tr>
                                 @endforeach
