@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 
 class Order extends Model
 {
+    use HasFactory, SoftDeletes;
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -22,6 +25,11 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
+    public function scopeSearch($query, $value)
+    {
+        $query->where('invoice_number', 'like', "%{$value}%");
+    }
+
     public function getTotalPriceAttribute()
     {
         $orderProducts = $this->orderProducts;
@@ -32,6 +40,11 @@ class Order extends Model
         }
 
         return $totalPrice;
+    }
+
+    public function getDoneAtForHumanAttribute()
+    {
+        return $this->done_at ? Carbon::parse($this->done_at)->diffForHumans() : null;
     }
 
     protected static function boot()

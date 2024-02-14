@@ -12,7 +12,6 @@ class ProductList extends Component
 
     public $search = '';
     public $perPage = 10;
-    public $is_admin = '';
 
     public function destroy($id)
     {

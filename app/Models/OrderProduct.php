@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderProduct extends Model
 {
     protected $keyType = 'string';
 
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'order_id',
         'product_id',
         'quantity',
         'unit_price',
+        'paid_amount'
     ];
 
     public function order()

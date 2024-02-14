@@ -13,6 +13,7 @@ class Pos extends Component
     public $product;
     public $order;
     public $total_price;
+    public $paid_amount;
 
     public function render()
     {
@@ -41,7 +42,7 @@ class Pos extends Component
         session()->flash('message', 'Sukses mulai transaksi, silakan pilih produk.');
     }
 
-    public function addToCart($productId)
+    public function updateCart($productId, $isAdded = true)
     {
         try {
             if ($this->order) {
@@ -51,19 +52,30 @@ class Pos extends Component
                     ->first();
                 
                 if ($orderProduct) {
-                    $orderProduct->increment('quantity', 1);
+                    if ($isAdded) {
+                        $orderProduct->increment('quantity', 1);
+                    } else {
+                        $orderProduct->decrement('quantity', 1);
+                        if ($orderProduct->quantity < 1) {
+                            $orderProduct->delete();
+                            session()->flash('message', 'Produk berhasil dihapus dari keranjang');
+                            return;
+                        }
+                    }
                     $orderProduct->save();
                 } else {
-                    OrderProduct::create([
-                        'order_id' => $this->order->id,
-                        'product_id' => $product->id,
-                        'unit_price' => $product->selling_price,
-                        'quantity' => 1
-                    ]);
+                    if ($isAdded) {
+                        OrderProduct::create([
+                            'order_id' => $this->order->id,
+                            'product_id' => $product->id,
+                            'unit_price' => $product->selling_price,
+                            'quantity' => 1
+                        ]);
+                    }
                 }
                 $this->total_price = $this->order->total_price ?? 0;
-    
-                session()->flash('message', 'Produk berhasil ditambahkan');
+
+                session()->flash('message', $isAdded ? 'Produk berhasil ditambahkan' : 'Produk berhasil dihapus dari keranjang');
             } else {
                 session()->flash('message', 'Klik Mulai Transaksi Dahulu');
             }
@@ -75,10 +87,30 @@ class Pos extends Component
         }
     }
 
+    public function done()
+    {
+        $this->validate([
+            'paid_amount' => 'required'
+        ]);
+
+        $this->order->update([
+            'paid_amount' => $this->paid_amount,
+            'done_at' => now()
+        ]);
+
+        session()->flash('message', 'Order/Transaksi selesai');
+        return redirect()->route('pos');
+    }
+
     function generateUniqueCode($length = 6) {
-        $randomNumber = mt_rand(1, pow(10, $length) - 1);
-        $randomNumber = str_pad($randomNumber, $length, '0', STR_PAD_LEFT);
-        return $randomNumber;
+        $number = uniqid();
+        $varray = str_split($number);
+        $len = sizeof($varray);
+        $uniq = array_slice($varray, $len-6, $len);
+        $uniq = implode(",", $uniq);
+        $uniq = str_replace(',', '', $uniq);
+
+        return $uniq;
     }
 
 }
