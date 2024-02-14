@@ -43,8 +43,8 @@
                                   
                                     <td>{{$item->invoice_number}}</td>
                                     <td>{{$item->done_at_for_human}}</td>
-                                    <td>Rp. {{$item->total_price_formatted}}</td>
-                                    <td>Rp. {{$item->paid_amount_formatted}}</td>
+                                    <td>{{$item->total_price_formatted}}</td>
+                                    <td>{{$item->paid_amount_formatted}}</td>
                                    
                                 </tr>
                                 @endforeach

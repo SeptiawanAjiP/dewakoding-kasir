@@ -50,7 +50,7 @@ class Order extends Model
 
     public function getPaidAmountFormattedAttribute()
     {
-        return number_format($this->paid_amount, 0, ',', '.');
+        return 'Rp ' .number_format($this->paid_amount, 0, ',', '.');
     }
 
     public function getTotalPriceFormattedAttribute()
