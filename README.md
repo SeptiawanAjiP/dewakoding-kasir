@@ -67,3 +67,6 @@ Dewakoding Kasir is a simple Point of Sale (POS) or cashier application built us
 ### Usage
 
 Visit `http://localhost:8000` in your browser to access the web-based landing page generator.
+
+### To do
+(soon)
